@@ -1,3 +1,6 @@
+#ifndef __PINNING_H__
+#define __PINNING_H__
+
 #include <Arduino.h>
 
 /**
@@ -37,3 +40,4 @@
 #define BLUETOOTH_TX 10
 #define BLUETOOTH_RX 11
 
+#endif

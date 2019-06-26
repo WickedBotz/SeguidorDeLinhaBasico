@@ -1,3 +1,6 @@
+#ifndef __MOTOR_H__
+#define __MOTOR_H__
+
 #include <Arduino.h>
 #include <stdarg.h>
 
@@ -99,4 +102,4 @@ void axisMove(axis aux, int leftPwr, int rightPwr) {
 
 /* End Axis **********************************************************************************/
 
-
+#endif

@@ -13,6 +13,9 @@ SoftwareSerial bluetooth(BLUETOOTH_RX, BLUETOOTH_TX);
 reflectance sensors[SENSORNO];
 axis motorAxis;
 
+void parse_bluetooth(char option);
+
+
 void setup() 
 {
     Serial.begin(9600); /* Inicializa monitor serial */
@@ -59,7 +62,8 @@ void parse_bluetooth(char option) {
             /* Para direita */
             axisRight(motorAxis, 255, 255);
             break;
-        default:
+        case 'a':
+        case 'x':
             /* Começa o seguidor */
             unsigned long start_time = millis();
             while ((millis() - start_time) < STOP_TIME) {
@@ -67,6 +71,9 @@ void parse_bluetooth(char option) {
             }
             axisMove(motorAxis, 0, 0); /* Para o robô */
 
+            break;
+        default:
+            axisForward(motorAxis, 0, 0);
             break;
     }
 }

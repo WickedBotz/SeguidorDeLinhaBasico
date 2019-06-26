@@ -1,3 +1,6 @@
+#ifndef __REFLECTANCE_H__
+#define __REFLECTANCE_H__
+
 #include <Arduino.h>
 #include <stdbool.h>
 
@@ -32,3 +35,5 @@ bool higherTreshold(reflectance aux) {
 bool lowerTreshold(reflectance aux) {
   return (reflectanceRead(aux) < aux.treshold);
 }
+
+#endif

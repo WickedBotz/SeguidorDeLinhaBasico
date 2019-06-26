@@ -1,3 +1,6 @@
+#ifndef __FOLLOWER_H__
+#define __FOLLOWER_H__
+
 #include "reflectance.h"
 #include "pinning.h"
 #include "motor.h"
@@ -31,6 +34,67 @@
 #define SPEED5 100
 
 /**
+ * Executa o código do seguidor de linha por máquina de estados
+ */
+void follow_line(reflectance sensors[], axis motor_axis) {
+    int speed_left, speed_right;
+
+    speed_left = speed_right = 0;
+
+    if (
+        /* 111111 */
+        (lowerTreshold(sensors[0]) && lowerTreshold(sensors[1]) && lowerTreshold(sensors[2]) &&
+        lowerTreshold(sensors[3]) && lowerTreshold(sensors[4]) && lowerTreshold(sensors[5])) ||
+        /* 011110 */
+        (higherTreshold(sensors[0]) && lowerTreshold(sensors[1]) && lowerTreshold(sensors[2]) &&
+        lowerTreshold(sensors[3]) && lowerTreshold(sensors[4]) && higherTreshold(sensors[5])) ||
+        /* 001100 */
+        (higherTreshold(sensors[0]) && higherTreshold(sensors[1]) && lowerTreshold(sensors[2]) &&
+        lowerTreshold(sensors[3]) && higherTreshold(sensors[4]) && higherTreshold(sensors[5])) 
+    ) { /* ir para frente */
+        speed_left = SPEED0;
+        speed_right = SPEED0;
+    } else /* curva para esquerda */
+    if ( /* 111110 */
+        (lowerTreshold(sensors[0]) && lowerTreshold(sensors[1]) && lowerTreshold(sensors[2]) &&
+        lowerTreshold(sensors[3]) && lowerTreshold(sensors[4]) && higherTreshold(sensors[5]))
+    ) {
+        speed_left = SPEED0;
+        speed_right = SPEED1;
+    } else if ( /* 111100 */
+        (lowerTreshold(sensors[0]) && lowerTreshold(sensors[1]) && lowerTreshold(sensors[2]) &&
+        lowerTreshold(sensors[3]) && higherTreshold(sensors[4]) && higherTreshold(sensors[5]))
+    ) {
+        speed_left = SPEED0;
+        speed_right = SPEED2;
+    }
+
+    
+    
+    
+    /* 111000 */
+    /* 110000 */
+    /* 100000 */
+
+    /* 011100 */
+    /* 011000 */
+    /* 010000 */   
+
+    /* curva para direita */
+    /* 011111 */
+    /* 001111 */
+    /* 000111 */
+    /* 000011 */
+    /* 000001 */
+
+    /* 001110 */
+    /* 000110 */
+    /* 000010 */   
+
+}
+
+
+/**
  * Converte o resultado dos sensores em um número, que será comparado com as constantes
  * dos sensores.
  */
@@ -38,14 +102,14 @@ int sensor_array_check(reflectance sensors[]) {
     size_t n = SENSORNO;
     int sensor_check = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = (n-1); i >= 0; i--) {
         sensor_check = sensor_check | (lowerTreshold(sensors[i]) ? 1 : 0) << (i*8);
     }
 
     return sensor_check;
 }
 
-void follow_line(reflectance sensors[], axis motor_axis) {
+void follow_line_constants(reflectance sensors[], axis motor_axis) {
     int sensor_value  = sensor_array_check(sensors);
     int speed_right, speed_left;
 
@@ -134,3 +198,5 @@ void follow_line(reflectance sensors[], axis motor_axis) {
 
     axisForward(motor_axis, speed_left, speed_right);
 } 
+
+#endif
